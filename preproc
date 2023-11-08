@@ -1,0 +1,27 @@
+import os
+from pdf2image import convert_from_path
+import cairosvg
+
+# Function to convert PDF to SVG
+def convert_pdf_to_svg(pdf_path, output_folder):
+    # Create the output folder if it doesn't exist
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+    
+    # Convert PDF to a list of images
+    images = convert_from_path(pdf_path, fmt='png')
+
+    # Convert each image to SVG
+    for i, image in enumerate(images):
+        # Define the SVG file path
+        svg_file = os.path.join(output_folder, f"page_{i+1}.svg")
+        # Convert the image to SVG and save it
+        cairosvg.svg2svg(bytestring=image.tobytes(), write_to=svg_file)
+
+        print(f"Converted page {i+1} to SVG and saved as '{svg_file}'")
+
+# Example usage
+if __name__ == "__main__":
+    pdf_path = 'example.pdf'  # Replace with your PDF file path
+    output_folder = 'svg_output'  # Replace with your desired output folder
+    convert_pdf_to_svg(pdf_path, output_folder)
